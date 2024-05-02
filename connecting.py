@@ -36,21 +36,21 @@ class Person:
         self.age = age
 
     def get_all(self):
-        with DbConnect(db_params) as cur:
+        with DbConnect(db_params) as conn:
             select_query = 'SELECT id, name, email, age FROM Person;'
-            cur.execute(select_query)
+            conn.execute(select_query)
             persons = []
-            for row in cur.fetchall():
+            for row in conn.fetchall():
                 persons.append(Person(id=row[0], name=row[1], email=row[2], age=row[3]))
             return persons
 
     def get_one(id: int):
-        with DbConnect(db_params) as cur:
+        with DbConnect(db_params) as conn:
             select_query = 'SELECT * FROM Person WHERE id = %s;'
-            cur.execute(select_query, (id,))
-            row = cur.fetchone()
-            if row:
-                return Person(id=row[1], name=row[1], email=row[2], age=row[3])
+            conn.execute(select_query, (id,))
+            data = conn.fetchone()
+            if data:
+                return Person(id=data[0], name=data[1], email=data[2], age=data[3])
             else:
                 return None
 
